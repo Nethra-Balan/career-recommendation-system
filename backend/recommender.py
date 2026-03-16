@@ -19,39 +19,31 @@ merged_df["company"] = merged_df["company"].fillna("unknown_company")
 merged_df["job_location"] = merged_df["job_location"].fillna("unknown_location")
 merged_df["job_skills"] = merged_df["job_skills"].fillna("")
 
-# Convert to lowercase
-merged_df["job_title"] = merged_df["job_title"].str.lower()
+# Lowercase
 merged_df["job_skills"] = merged_df["job_skills"].str.lower()
+merged_df["job_location"] = merged_df["job_location"].str.lower()
 
-# Create combined features
-merged_df["combined_features"] = (
-    merged_df["job_skills"] + " " +
-    merged_df["job_location"] + " " +
-    merged_df["job_level"].astype(str)
-)
-
-# TF-IDF
+# TF-IDF only on skills
 vectorizer = TfidfVectorizer(max_features=5000)
-tfidf_matrix = vectorizer.fit_transform(merged_df["combined_features"])
+vectorizer.fit(merged_df["job_skills"])
+
 
 def recommend_jobs(user_skills, user_location, user_level, top_n=5):
 
     user_skills = user_skills.lower().replace(",", " ")
+    user_location = user_location.lower()
 
-    # filter by location
+    # Filter by location
     filtered_jobs = merged_df[
-        merged_df["job_location"].str.contains(user_location, case=False, na=False)
+        merged_df["job_location"].str.contains(user_location, na=False)
     ]
 
     if filtered_jobs.empty:
         return []
 
-    # create user input
-    user_input = user_skills + " " + user_location.lower() + " " + user_level.lower()
-
-    user_vector = vectorizer.transform([user_input])
-
-    job_vectors = vectorizer.transform(filtered_jobs["combined_features"])
+    # Transform skills
+    user_vector = vectorizer.transform([user_skills])
+    job_vectors = vectorizer.transform(filtered_jobs["job_skills"])
 
     similarity = cosine_similarity(user_vector, job_vectors)
 
