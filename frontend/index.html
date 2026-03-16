@@ -1,29 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Job Recommendation System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Recommendation System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>Job Recommendation System</h1>
+    <main class="container">
+        <header>
+            <h1>Job Recommendation System</h1>
+            <p class="subtitle">Find the perfect role based on your skills and location.</p>
+        </header>
 
-<div class="form-box">
+        <div class="form-box">
+            <input type="text" id="skills" placeholder="Enter skills ">
+            <input type="text" id="location" placeholder="Enter location ">
+            <input type="text" id="level" placeholder="Enter seniority level ">
 
-<input type="text" id="skills" placeholder="Enter skills (python, ml)">
-<input type="text" id="location" placeholder="Enter location">
-<input type="text" id="level" placeholder="Enter level (entry/mid/senior)">
+            <button onclick="getRecommendations()">Get Recommendations</button>
+        </div>
 
-<button onclick="getRecommendations()">Get Recommendations</button>
+        <div class="results-section">
+            <div id="results"></div>
+        </div>
+    </main>
 
-</div>
-
-<h2>Recommended Jobs</h2>
-
-<div id="results"></div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
